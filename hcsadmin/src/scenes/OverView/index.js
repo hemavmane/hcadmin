@@ -19,28 +19,37 @@ import {
 import { ApiUrl } from "../../ApiRUL";
 import CustomColumnMenu from "../customgrid";
 
-const About = () => {
+const OverView = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
   const [image, setImage] = useState(null);
-  const [AddAbout, setAddAbout] = useState(false);
+  const [AddOverView, setAddOverView] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editRowId, setEditRowId] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
   let InitialData = {
     title: "",
-    description: "",
-
+    counts: "",
+    order: ""
   };
 
   const [PayloadData, setPayloadData] = useState(InitialData);
 
   const [SelectedSlot, setSelectedSlot] = useState([]);
+  const [SlotsData, setSlotsData] = useState([]);
   const [ItemsData, setItemsData] = useState([]);
   const columns = [
     { field: "index", headerName: "SI No.", width: 100 },
+    {
+      field: "order",
+      headerName: "Order",
+      flex: 2,
+      cellClassName: "name-column--cell",
+    },
+
+
     {
       field: "title",
       headerName: "Title",
@@ -48,20 +57,22 @@ const About = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "description",
-      headerName: "Description",
+      field: "counts",
+      headerName: "Count",
       flex: 2,
       cellClassName: "name-column--cell",
     },
+    
+
 
     {
-      field: "AboutImg",
-      headerName: "About Image",
+      field: "logo",
+      headerName: "Logo",
       flex: 1,
       renderCell: (params) => (
         <img
-          src={`${ApiUrl.IMAGEURL}/AboutImage/${params.row.aboutImg}`}
-          alt="AboutImg"
+          src={`${ApiUrl.IMAGEURL}/OverviewImage/${params.row.logo}`}
+          alt="logo"
           style={{ width: 40, height: 40, borderRadius: "none" }}
         />
       ),
@@ -93,7 +104,7 @@ const About = () => {
 
 
   useEffect(() => {
-    getAbout();
+    getOverView();
 
   }, []);
 
@@ -104,20 +115,19 @@ const About = () => {
       setSelectedSlot(selectedSlotIds);
     }
   }, [editRowId]);
-  const getAbout = async () => {
+  const getOverView = async () => {
     try {
-      const response = await getData(ApiUrl.GETABOUT);
-
+      const response = await getData(ApiUrl.GETOVERVIEW);
+     console.log(response,"response")
       if (response.status === 200) {
         const rowsWithId = response.data.map((item, index) => ({
           ...item,
           id: item._id,
           index: index + 1,
-          Aboutimg: item.Aboutimg,
+          OverViewimg: item.OverViewimg,
         }));
         setRows(rowsWithId);
-
-        setAddAbout(false);
+        setAddOverView(false);
       }
     } catch (error) {
       console.error("Error adding user:", error);
@@ -133,7 +143,6 @@ const About = () => {
       [name]: value,
     }));
   };
-  
   const handleImage = (e) => {
     let { name, value } = e.target;
 
@@ -148,19 +157,20 @@ const About = () => {
 
       const formData = new FormData();
       formData.append("title", PayloadData.title);
-      formData.append("description", PayloadData.description);
-      formData.append("aboutImg", image);
+      formData.append("counts", PayloadData.counts);
+      formData.append("order", PayloadData.order);
+      formData.append("logo", image);
 
-      const response = await postFormData(ApiUrl.ADDABOUT, formData);
+      const response = await postFormData(ApiUrl.ADDOVERVIEW, formData);
 
       if (response.status === 200) {
         alert(response.data.message);
         setPayloadData(InitialData);
-        setAddAbout(false);
+        setAddOverView(false);
         window.location.reload();
       }
     } catch (error) {
-      console.error("Error adding About:", error);
+      console.error("Error adding OverView:", error);
     }
   };
 
@@ -170,15 +180,16 @@ const About = () => {
     try {
       const formData = new FormData();
       formData.append("title", PayloadData.title);
-      formData.append("description", PayloadData.description);
-      formData.append("aboutImg", image);
+      formData.append("counts", PayloadData.counts);
+      formData.append("order", PayloadData.order);
+      formData.append("logo", image);
 
-      const response = await putFormData(ApiUrl.UPDATEABOUT + editRowId, formData);
+      const response = await putFormData(ApiUrl.UPDATEOVERVIEW + editRowId, formData);
 
       if (response.status === 200) {
         alert(response.data.message);
         setPayloadData(InitialData);
-        setAddAbout(false);
+        setAddOverView(false);
         window.location.reload();
       }
     } catch (error) {
@@ -189,43 +200,42 @@ const About = () => {
 
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this About?")) {
-      const response = await deleteData(ApiUrl.DELETEABOUT + id);
+    if (window.confirm("Are you sure you want to delete this OverView?")) {
+      const response = await deleteData(ApiUrl.DELETEOVERVIEW + id);
       if (response.status === 200) {
         alert(response.data.message);
         window.location.reload();
-        getAbout();
+        getOverView();
       }
     }
   };
 
   const handleEdit = (data) => {
-    setAddAbout(true);
+    setAddOverView(true);
     setIsEditMode(true);
     setEditRowId(data._id);
-    let image = `${ApiUrl.IMAGEURL}/AboutImage/${data.aboutImg}`;
+    let image = `${ApiUrl.IMAGEURL}/OverviewImage/${data.logo}`;
     let finddata = rows.find((ele) => ele._id === data._id);
-    setImage(finddata?.aboutImg);
+    setImage(finddata?.logo);
     setImagePreview(image);
-
 
     setPayloadData({
       title: finddata?.title,
-      description: finddata?.description,
+      counts: finddata?.counts,
 
     });
 
-    setImage(finddata?.aboutImg);
+    setImage(finddata?.logo);
 
   };
 
 
   return (
     <Box m="20px">
-      {!AddAbout ? (
+      {!AddOverView ? (
         <>
-          <Button onClick={() => setAddAbout(true)}>Add About</Button>
-          <Header title="About" />
+          <Button onClick={() => setAddOverView(true)}>Add OverView</Button>
+          <Header title="OverView" />
           <Box
             m="40px 0 0 0"
             height="75vh"
@@ -267,12 +277,12 @@ const About = () => {
         </>
       ) : (
         <div>
-          <Button onClick={() => setAddAbout(false)}>View About</Button>
+          <Button onClick={() => setAddOverView(false)}>View OverView</Button>
 
           <div className="row m-auto">
             <Header
               subtitle={
-                isEditMode ? "Edit the About" : "Create a New About"
+                isEditMode ? "Edit the OverView" : "Create a New OverView"
               }
             />
             <div>
@@ -288,16 +298,22 @@ const About = () => {
                         placeholder="Title"
                       />
                     </div>
-                    <div className="col-md-12 mb-3 ">
+                    <div className="col-md-6 mb-3 ">
                       <Form.Control
-                        as="textarea"
                         onChange={handleChange}
-                        name="description"
-                        value={PayloadData.description}
-                        placeholder="Description"
+                        name="counts"
+                        value={PayloadData.counts}
+                        placeholder="counts"
                       />
                     </div>
-
+                    <div className="col-md-6 mb-3 ">
+                      <Form.Control
+                        onChange={handleChange}
+                        name="order"
+                        value={PayloadData.order}
+                        placeholder="Order"
+                      />
+                    </div>
 
                     <div className="row m-auto cate-img text-center p-3">
                       <Form.Control
@@ -324,7 +340,7 @@ const About = () => {
                     </div>
                     <div className="row mt-4 text-center">
                       <Button
-                        onClick={() => setAddAbout(false)}
+                        onClick={() => setAddOverView(false)}
                         className="col-md-3 me-auto"
                         variant="contained"
                       >
@@ -365,4 +381,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default OverView;

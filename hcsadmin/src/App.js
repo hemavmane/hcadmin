@@ -12,6 +12,8 @@ import Login from "./scenes/Login";
 import SignUp from "./scenes/SignUp.jsx";
 import ProviderTrust from "./scenes/ProviderTrust/index.js";
 import BlogPage from "./scenes/Blogs/index.jsx";
+import About from "./scenes/About/About.jsx";
+import OverView from "./scenes/OverView/index.js";
 
 
 function App() {
@@ -80,7 +82,8 @@ function App() {
               <Route path="/providertrust" element={<ProviderTrust />} />
               <Route path="/banner" element={<Banner />} />
               <Route path="/blogpage" element={<BlogPage />} />
-             
+              <Route path="/about" element={<About />} />
+              <Route path="/overview" element={<OverView />} />
             </Routes>
           </main>
         </div>

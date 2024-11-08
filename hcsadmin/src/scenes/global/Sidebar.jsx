@@ -167,13 +167,31 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            {/* <Item
-              title="Order"
-              to="/order"
-              icon={<LocalMallOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
+
+            <SubMenu title="About Page" icon={<GridViewIcon />}>
+              <Item
+                title="About"
+                to="/about"
+                icon={<PhotoIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Overview"
+                to="/overview"
+                icon={<ManageAccountsIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Provider Trust"
+                to="/providertrust"
+                icon={<ManageAccountsIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SubMenu>
+
           </Box>
 
           <Box
