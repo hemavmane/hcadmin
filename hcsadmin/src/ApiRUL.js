@@ -1,6 +1,6 @@
 export const ApiUrl = {
-  BASEURL: "http://localhost:8000/api",
-  IMAGEURL: "http://localhost:8000/",
+  BASEURL: "https://apihc.gdswellness.com/api",
+  IMAGEURL: "https://apihc.gdswellness.com/",
 
   ADDSERVICE: "/service/create",
   GETSERVICE: "/service/getdata",
