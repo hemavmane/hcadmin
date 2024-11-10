@@ -35,4 +35,10 @@ export const ApiUrl = {
   UPDATEOVERVIEW: "/overview/update/",
   GETOVERVIEW: "/overview/getdata",
   DELETEOVERVIEW: "/overview/trash/",
+
+
+  ADDCONTACT: "/contact/create",
+  UPDATECONTACT: "/contact/update/",
+  GETCONTACT: "/contact/getdata",
+  DELETECONTACT: "/contact/trash/",
 };

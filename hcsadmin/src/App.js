@@ -12,8 +12,10 @@ import Login from "./scenes/Login";
 import SignUp from "./scenes/SignUp.jsx";
 import ProviderTrust from "./scenes/ProviderTrust/index.js";
 import BlogPage from "./scenes/Blogs/index.jsx";
-import About from "./scenes/About/About.jsx";
+import About from "./scenes/About/index.jsx";
 import OverView from "./scenes/OverView/index.js";
+import Contacts from "./scenes/contacts/index.jsx";
+import CompanyValue from "./scenes/CompanyValue/index.js";
 
 
 function App() {
@@ -84,6 +86,8 @@ function App() {
               <Route path="/blogpage" element={<BlogPage />} />
               <Route path="/about" element={<About />} />
               <Route path="/overview" element={<OverView />} />
+              <Route path="/contact" element={<Contacts />} />
+              <Route path="/cmvalue" element={<CompanyValue />} />
             </Routes>
           </main>
         </div>

@@ -22,7 +22,7 @@ import CustomColumnMenu from "../customgrid";
 const About = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState();
   const [image, setImage] = useState(null);
   const [AddAbout, setAddAbout] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -39,55 +39,7 @@ const About = () => {
 
   const [SelectedSlot, setSelectedSlot] = useState([]);
   const [ItemsData, setItemsData] = useState([]);
-  const columns = [
-    { field: "index", headerName: "SI No.", width: 100 },
-    {
-      field: "title",
-      headerName: "Title",
-      flex: 1,
-      cellClassName: "name-column--cell",
-    },
-    {
-      field: "description",
-      headerName: "Description",
-      flex: 2,
-      cellClassName: "name-column--cell",
-    },
 
-    {
-      field: "AboutImg",
-      headerName: "About Image",
-      flex: 1,
-      renderCell: (params) => (
-        <img
-          src={`${ApiUrl.IMAGEURL}/AboutImage/${params.row.aboutImg}`}
-          alt="AboutImg"
-          style={{ width: 40, height: 40, borderRadius: "none" }}
-        />
-      ),
-      headerAlign: "left",
-      align: "left",
-    },
-
-    {
-      field: "action",
-      headerName: "Action",
-      flex: 1,
-      renderCell: ({ row }) => (
-        <div color={colors.grey[100]} sx={{ ml: "5px" }}>
-          <CiEdit
-            className="cursor edit me-2 fs-6"
-            onClick={() => handleEdit(row)}
-          />
-          |{" "}
-          <MdDeleteForever
-            className="cursor delete fs-6"
-            onClick={() => handleDelete(row.id)}
-          />
-        </div>
-      ),
-    },
-  ];
 
 
 
@@ -97,25 +49,14 @@ const About = () => {
 
   }, []);
 
-  useEffect(() => {
-    let data = ItemsData.length > 0 ? ItemsData : [];
-    if (data) {
-      const selectedSlotIds = data?.map((slot) => slot?._id);
-      setSelectedSlot(selectedSlotIds);
-    }
-  }, [editRowId]);
+
   const getAbout = async () => {
     try {
       const response = await getData(ApiUrl.GETABOUT);
 
       if (response.status === 200) {
-        const rowsWithId = response.data.map((item, index) => ({
-          ...item,
-          id: item._id,
-          index: index + 1,
-          Aboutimg: item.Aboutimg,
-        }));
-        setRows(rowsWithId);
+
+        setRows(response.data);
 
         setAddAbout(false);
       }
@@ -123,7 +64,7 @@ const About = () => {
       console.error("Error adding user:", error);
     }
   };
-
+  console.log(rows, "response")
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -133,7 +74,7 @@ const About = () => {
       [name]: value,
     }));
   };
-  
+
   const handleImage = (e) => {
     let { name, value } = e.target;
 
@@ -204,18 +145,15 @@ const About = () => {
     setIsEditMode(true);
     setEditRowId(data._id);
     let image = `${ApiUrl.IMAGEURL}/AboutImage/${data.aboutImg}`;
-    let finddata = rows.find((ele) => ele._id === data._id);
-    setImage(finddata?.aboutImg);
+ 
+    setImage(data?.aboutImg);
     setImagePreview(image);
-
-
     setPayloadData({
-      title: finddata?.title,
-      description: finddata?.description,
-
+      title: data?.title,
+      description: data?.description,
     });
 
-    setImage(finddata?.aboutImg);
+    setImage(data?.aboutImg);
 
   };
 
@@ -255,14 +193,31 @@ const About = () => {
               },
             }}
           >
-            <DataGrid
-              checkboxSelection
-              rows={rows}
-              columns={columns}
-              components={{
-                ColumnMenu: CustomColumnMenu,
-              }}
-            />
+            <div className="AboutContainer02">
+              <div className="AboutContainer02TitleAndDescription">
+                <h2>{rows?.title}</h2>
+                <article>{rows?.description}</article>
+              </div>
+
+              <div className="AboutContainer02ImageContainer">
+                <img
+                  className="AboutContainer02Image" width={200} height={200}
+                  src={`${ApiUrl.IMAGEURL}/AboutImage/${rows?.aboutImg}`}
+                  alt="IMAGE"
+                  effect="blur"
+                />
+              </div>
+              <div className="mt-3">
+                <button
+                  className="cursor border-none edit me-2 fs-6"
+                  onClick={() => handleEdit(rows)}
+                >Edit</button>
+                <button
+                  className="cursor border-none delete fs-6"
+                  onClick={() => handleDelete(rows?.id)}
+                >Delete</button>
+              </div>
+            </div>
           </Box>
         </>
       ) : (

@@ -5,21 +5,11 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import GridViewIcon from "@mui/icons-material/GridView";
-import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
-import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt";
-import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
-import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
-import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
-import EventNoteIcon from "@mui/icons-material/EventNote";
-import QuizIcon from "@mui/icons-material/Quiz";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PhotoIcon from "@mui/icons-material/Photo";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -168,6 +158,15 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
+            <Item
+              title="Contact"
+              to="/contact"
+              icon={<PermContactCalendarIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+
             <SubMenu title="About Page" icon={<GridViewIcon />}>
               <Item
                 title="About"
@@ -190,6 +189,15 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <Item
+                title="Company Values Page"
+                to="/cmvalue"
+                icon={<ManageAccountsIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+
+
             </SubMenu>
 
           </Box>
@@ -198,8 +206,8 @@ const Sidebar = () => {
             sx={{
               position: "absolute",
               bottom: "-10px",
-              width: "100%", // Ensures it spans the full width of the sidebar
-              textAlign: "center", // Center aligns the button
+              width: "100%",
+              textAlign: "center",
               marginTop: "25px",
             }}
           >

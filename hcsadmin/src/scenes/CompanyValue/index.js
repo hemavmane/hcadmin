@@ -19,7 +19,7 @@ import {
 import { ApiUrl } from "../../ApiRUL";
 import CustomColumnMenu from "../customgrid";
 
-const OverView = () => {
+const CompanyValue = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
@@ -375,4 +375,4 @@ order: finddata?.order,
   );
 };
 
-export default OverView;
+export default CompanyValue;
