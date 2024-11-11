@@ -9,6 +9,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Form } from "react-bootstrap";
 import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+import { GrFormView } from "react-icons/gr";
 
 import {
   deleteData,
@@ -20,54 +21,55 @@ import {
 import { ApiUrl } from "../../ApiRUL";
 import CustomColumnMenu from "../customgrid";
 
-const CompanyValue = () => {
+const MissionPage = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
   const [image, setImage] = useState(null);
-  const [AddComCompanyValue, setAddComCompanyValue] = useState(false);
+  const [Mission, setMission] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editRowId, setEditRowId] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [description, setDescription] = useState("");
+  const [Subtitle, setSubtitle] = useState("")
+  const [description, setDescription] = useState("")
 
   let InitialData = {
     title: "",
-    order: ""
+    Subtitle: "",order:""
   };
 
   const [PayloadData, setPayloadData] = useState(InitialData);
 
-  const [SelectedSlot, setSelectedSlot] = useState([]);
-  const [SlotsData, setSlotsData] = useState([]);
-  const [ItemsData, setItemsData] = useState([]);
+
   const columns = [
     { field: "index", headerName: "SI No.", width: 100 },
-    {
-      field: "order",
-      headerName: "Order",
-      flex: 2,
-      cellClassName: "name-column--cell",
-    },
-
-
     {
       field: "title",
       headerName: "Title",
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    
-   
+    {
+      field: "subtitle",
+      headerName: "subtitle",
+      flex: 2,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "order",
+      headerName: "order",
+      flex: 2,
+      cellClassName: "name-column--cell",
+    },
 
     {
-      field: "logo",
-      headerName: "Logo",
+      field: "missionImg",
+      headerName: "Mission Image",
       flex: 1,
       renderCell: (params) => (
         <img
-          src={`${ApiUrl.IMAGEURL}/CompanyValueImage/${params.row.logo}`}
-          alt="logo"
+          src={`${ApiUrl.IMAGEURL}/MissionImage/${params.row.missionImg}`}
+          alt="missionImg"
           style={{ width: 40, height: 40, borderRadius: "none" }}
         />
       ),
@@ -90,35 +92,45 @@ const CompanyValue = () => {
             className="cursor delete fs-6"
             onClick={() => handleDelete(row.id)}
           />
+          <GrFormView
+            className="cursor edit fs-6"
+            onClick={() => handleView(row.id)}
+          />
+
+
         </div>
       ),
     },
   ];
 
+  const handleView = () => {
 
+  }
 
 
   useEffect(() => {
-    getComCompanyValue();
+    getMission();
 
   }, []);
 
 
-  const getComCompanyValue = async () => {
+  const getMission = async () => {
     try {
-      const response = await getData(ApiUrl.GETCOMPANYVALUE);
-      console.log(response, "response")
+      const response = await getData(ApiUrl.GETMISSION);
+
       if (response.status === 200) {
-        const rowsWithId = response.data.map((item, index) => ({
+
+        const rowsWithId = response?.data?.map((item, index) => ({
           ...item,
           id: item._id,
           index: index + 1,
-          description:JSON.stringify(item.description),
-          CompanyValueimg: item.ComCompanyValueimg,
+          missionImg: item.missionImg,
         }));
         setRows(rowsWithId);
-        setAddComCompanyValue(false);
+
+        setMission(false);
       }
+      console.log(response?.data)
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -133,10 +145,6 @@ const CompanyValue = () => {
       [name]: value,
     }));
   };
-  const handleEditorChange = (event, editor) => {
-    const data = editor.getData();
-    setDescription(data);
-  };
   const handleImage = (e) => {
     let { name, value } = e.target;
 
@@ -150,21 +158,22 @@ const CompanyValue = () => {
     try {
 
       const formData = new FormData();
-      formData.append("title", PayloadData.title);
-      formData.append("description", description);
-      formData.append("order", PayloadData.order);
-      formData.append("logo", image);
 
-      const response = await postFormData(ApiUrl.ADDCOMPANYVALUE, formData);
+      formData.append("title", PayloadData.title);
+      formData.append("subtitle", PayloadData.Subtitle);
+      formData.append("order", PayloadData.order);
+      formData.append("missionImg", image);
+
+      const response = await postFormData(ApiUrl.ADDMISSION, formData);
 
       if (response.status === 200) {
         alert(response.data.message);
         setPayloadData(InitialData);
-        setAddComCompanyValue(false);
+        setMission(false);
         window.location.reload();
       }
     } catch (error) {
-      console.error("Error addingCompanyValue:", error);
+      console.error("Error adding Mission:", error);
     }
   };
 
@@ -172,18 +181,19 @@ const CompanyValue = () => {
 
   const handleUpdateData = async () => {
     try {
+
       const formData = new FormData();
       formData.append("title", PayloadData.title);
-      formData.append("description", description);
+      formData.append("subtitle", PayloadData.Subtitle);
       formData.append("order", PayloadData.order);
-      formData.append("logo", image);
+      formData.append("missionImg", image);
 
-      const response = await putFormData(ApiUrl.UPDATECOMPANYVALUE + editRowId, formData);
+      const response = await putFormData(ApiUrl.UPDATEMISSION + editRowId, formData);
 
       if (response.status === 200) {
         alert(response.data.message);
         setPayloadData(InitialData);
-        setAddComCompanyValue(false);
+        setMission(false);
         window.location.reload();
       }
     } catch (error) {
@@ -194,42 +204,45 @@ const CompanyValue = () => {
 
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete thisCompanyValue?")) {
-      const response = await deleteData(ApiUrl.DELETECOMPANYVALUE + id);
+    if (window.confirm("Are you sure you want to delete this Mission?")) {
+      const response = await deleteData(ApiUrl.DELETEMISSION + id);
       if (response.status === 200) {
         alert(response.data.message);
         window.location.reload();
-        getComCompanyValue();
+        getMission();
       }
     }
   };
 
   const handleEdit = (data) => {
-    setAddComCompanyValue(true);
-    
+    setMission(true);
     setIsEditMode(true);
     setEditRowId(data._id);
-    let image = `${ApiUrl.IMAGEURL}/CompanyValueImage/${data.logo}`;
+    let image = `${ApiUrl.IMAGEURL}/MissionImage/${data.missionImg}`;
     let finddata = rows.find((ele) => ele._id === data._id);
-    setImage(finddata?.logo);
+    setImage(finddata?.missionImg);
     setImagePreview(image);
 
     setPayloadData({
       title: finddata?.title,
-      order: finddata?.order,
+      Subtitle: finddata.subtitle,
+      order:finddata.order
     });
-    setDescription(finddata?.description);
-    setImage(finddata?.logo);
+
+
+
+
+    setImage(finddata?.missionImg);
 
   };
 
 
   return (
     <Box m="20px">
-      {!AddComCompanyValue ? (
+      {!Mission ? (
         <>
-          <Button onClick={() => setAddComCompanyValue(true)}>Add Company Value</Button>
-          <Header title="Company Value" />
+          <Button onClick={() => setMission(true)}>Add Mission</Button>
+          <Header title="Mission" />
           <Box
             m="40px 0 0 0"
             height="75vh"
@@ -271,12 +284,12 @@ const CompanyValue = () => {
         </>
       ) : (
         <div>
-          <Button onClick={() => setAddComCompanyValue(false)}>ViewCompanyValue</Button>
+          <Button onClick={() => setMission(false)}>View Mission</Button>
 
           <div className="row m-auto">
             <Header
               subtitle={
-                isEditMode ? "Edit theCompanyValue" : "Create a NewCompanyValue"
+                isEditMode ? "Edit the Mission" : "Create a New Mission"
               }
             />
             <div>
@@ -291,27 +304,26 @@ const CompanyValue = () => {
                         value={PayloadData.title}
                         placeholder="Title"
                       />
+
                     </div>
-                    <div className="col-md-6 mb-3 ">
+                    <div className="col-md-6 mb-3">
                       <Form.Control
                         onChange={handleChange}
                         name="order"
                         value={PayloadData.order}
                         placeholder="Order"
                       />
+
                     </div>
-                    <div className="row mb-3">
-                      <div>
-                        <CKEditor
-                          editor={ClassicEditor}
-                          data={description}
-                          onChange={handleEditorChange}
-                          height={200}
-                        />
-                      </div>
+                    <div className="col-md-12 mb-3">
+                      <Form.Control
+                        onChange={handleChange}
+                        name="Subtitle"
+                        value={PayloadData.Subtitle}
+                        placeholder="Subtitle"
+                      />
                     </div>
 
-                   
 
                     <div className="row m-auto cate-img text-center p-3">
                       <Form.Control
@@ -338,7 +350,7 @@ const CompanyValue = () => {
                     </div>
                     <div className="row mt-4 text-center">
                       <Button
-                        onClick={() => setAddComCompanyValue(false)}
+                        onClick={() => setMission(false)}
                         className="col-md-3 me-auto"
                         variant="contained"
                       >
@@ -379,4 +391,4 @@ const CompanyValue = () => {
   );
 };
 
-export default CompanyValue;
+export default MissionPage;

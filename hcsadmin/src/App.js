@@ -16,6 +16,7 @@ import About from "./scenes/About/index.jsx";
 import OverView from "./scenes/OverView/index.js";
 import Contacts from "./scenes/contacts/index.jsx";
 import CompanyValue from "./scenes/CompanyValue/index.js";
+import MissionPage from "./scenes/Mission/index.jsx";
 
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
               <Route path="/overview" element={<OverView />} />
               <Route path="/contact" element={<Contacts />} />
               <Route path="/cmvalue" element={<CompanyValue />} />
+              <Route path="/mission" element={<MissionPage />} />
             </Routes>
           </main>
         </div>

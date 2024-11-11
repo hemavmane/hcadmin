@@ -196,7 +196,14 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
-
+              
+              <Item
+                title="Mission and Vision"
+                to="/mission"
+                icon={<ManageAccountsIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
 
             </SubMenu>
 

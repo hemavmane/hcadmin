@@ -1,6 +1,6 @@
 export const ApiUrl = {
-  BASEURL: "http://localhost:8200/api",
-  IMAGEURL: "http://localhost:8200/",
+  BASEURL: "https://apihc.gdswellness.com/api",
+  IMAGEURL: "https://apihc.gdswellness.com/",
   // https://apihc.gdswellness.com
   ADDSERVICE: "/service/create",
   GETSERVICE: "/service/getdata",
@@ -36,9 +36,18 @@ export const ApiUrl = {
   GETOVERVIEW: "/overview/getdata",
   DELETEOVERVIEW: "/overview/trash/",
 
+  ADDCOMPANYVALUE: "/cvalue/create",
+  UPDATECOMPANYVALUE: "/cvalue/update/",
+  GETCOMPANYVALUE: "/cvalue/getdata",
+  DELETECOMPANYVALUE: "/cvalue/trash/",
 
   ADDCONTACT: "/contact/create",
   UPDATECONTACT: "/contact/update/",
   GETCONTACT: "/contact/getdata",
   DELETECONTACT: "/contact/trash/",
+
+  ADDMISSION: "/mission/create",
+  UPDATEMISSION: "/mission/update/",
+  GETMISSION: "/mission/getdata",
+  DELETEMISSION: "/mission/trash/",
 };
